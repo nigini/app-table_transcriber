@@ -70,9 +70,9 @@ def create_app(api_url , api_key, name=None, short_name=None, description=None):
     :rtype: integer
     """
     print('Creating app')
-    name = u'Flickr Person PHinder' # Name with a typo
-    short_name = u'flickrperson'
-    description = u'Do you see a human in this photo?'
+    name = u'Table Transcriber' # Name with a typo
+    short_name = u'tt'
+    description = u'Is this page has a table to be transcriber?'
     data = dict(name = name, short_name = short_name, description = description,
                hidden = 0)
     data = json.dumps(data)
@@ -94,18 +94,11 @@ def create_app(api_url , api_key, name=None, short_name=None, description=None):
     output = json.loads(urllib2.urlopen(request).read())
     if (output['id'] != None):
         print("Done!")
-        print("Ooooops! the name of the application has a typo!")
-        print("Updating it!")
-        if (update_app(api_url, api_key, output['id'], "Flickr Person Finder")): 
-            print "Application name fixed!"
-            return output['id']
-        else:
-            print "An error has occurred"
     else:
         print("Error creating the application")
         return 0
 
-def create_task(api_url , api_key, app_id, photo):
+def create_task(api_url, api_key, app_id, page_path):
     """
     Creates tasks for the application
 
@@ -114,7 +107,7 @@ def create_task(api_url , api_key, app_id, photo):
     :rtype: integer
     """
     # Data for the tasks
-    info = dict (link = photo['link'], url = photo['url'])
+    info = dict (page_path = page_path)
     data = dict (app_id = app_id, state = 0, info = info, calibration = 0, priority_0 = 0)
     data = json.dumps(data)
 
@@ -130,7 +123,7 @@ def create_task(api_url , api_key, app_id, photo):
     else:
         return False
 
-def get_flickr_photos(size="big"):
+def get_pages( path="static/tabletranscriber/pages/" ):
     """
     Gets public photos from Flickr feeds
     
@@ -138,22 +131,10 @@ def get_flickr_photos(size="big"):
     :returns: A list of photos.
     :rtype: list
     """
-    # Get the ID of the photos and load it in the output var
-    print('Contacting Flickr for photos')
-    query = "http://api.flickr.com/services/feeds/photos_public.gne?nojsoncallback=1&format=json"
-    urlobj = urllib2.urlopen(query)
-    data = urlobj.read()
-    urlobj.close()
-    output = json.loads(data)
     print('Data retrieved from Flickr')
-
-    # For each photo ID create its direct URL according to its size: big, medium, small
-    # (or thumbnail) + Flickr page hosting the photo
-    photos = []
-    for idx, photo in enumerate(output['items']):
-        print 'Retrieved photo: %s' % idx
-        photos.append({'link': photo["link"], 'url':  photo["media"]["m"]})
-    return photos
+    pages = []
+    pages.append('/' + path + 'example.png')
+    return pages
 
 
 import sys
@@ -182,9 +163,9 @@ if __name__ == "__main__":
     # First of all we get the URL photos
     # WARNING: Sometimes the flickr feed returns a wrong escape character, so it may
     # fail at this step
-    photos = get_flickr_photos()
+    pages = get_pages()
     # Finally, we have to create a set of tasks for the application
     # For this, we get first the photo URLs from Flickr
-    for photo in photos:
-        create_task(options.api_url, options.api_key, app_id, photo)
+    for page in pages:
+        create_task(options.api_url, options.api_key, app_id, page)
 

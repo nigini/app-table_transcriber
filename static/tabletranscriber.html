@@ -2,8 +2,8 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>FlickrPerson</title>
-    <meta name="description" content="FlickrPerson - ...">
+    <title>Table Transcriber</title>
+    <meta name="description" content="Table Transcriber - PyBossa Application">
     <meta name="author" content="">
 
     <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
@@ -17,14 +17,40 @@
     <!-- Bootstrap styles -->
     <link rel="stylesheet" href="/static/vendor/bootstrap/2.0.0/bootstrap.min.css">
     <link rel="stylesheet" href="/static/vendor/bootstrap/2.0.0/bootstrap-responsive.min.css">
+    <link rel="stylesheet" href="/static/tabletranscriber/css/jquery.iviewer.css" />
 
     <!-- Le javascript -->
-    <script type="text/javascript" src="/static/vendor/jquery.js"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.3/jquery.min.js" ></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.15/jquery-ui.min.js" ></script>
     <script type="text/javascript" src="/static/vendor/bootstrap/2.0.0/bootstrap-alert.js"></script>
     <script type="text/javascript" src="/static/vendor/bootstrap/2.0.0/bootstrap-dropdown.js"></script>
     <script type="text/javascript" src="/static/vendor/bootstrap/2.0.0/bootstrap-tooltip.js"></script>
     <script type="text/javascript" src="/static/vendor/bootstrap/2.0.0/bootstrap-popover.js"></script>
     <script type="text/javascript" src="/static/vendor/bootstrap/2.0.0/bootstrap-collapse.js"></script>
+    <script type="text/javascript" src="/static/tabletranscriber/js/jquery.mousewheel.min.js" ></script>
+    <script type="text/javascript" src="/static/tabletranscriber/js/jquery.iviewer.js" ></script>
+    <script type="text/javascript">
+      var $ = jQuery;
+      $(document).ready(function(){
+         $("#viewer").iviewer(
+        { 
+          src: 'static/tabletranscriber/pages/example.png', //this should be changed!
+          update_on_resize: false,
+          initCallback: function ()
+          {
+            var object = this;
+            $("#in").click(function(){ object.zoom_by(1);});
+            $("#out").click(function(){ object.zoom_by(-1);});
+            $("#fit").click(function(){ object.fit();});
+            $("#orig").click(function(){  object.set_zoom(100); });
+            $("#update").click(function(){ object.update_container_info();});
+          },
+          onMouseMove: function(object, coords) { },
+          onStartDrag: function(object, coords) { return true; }, //this image will not be dragged
+          onDrag: function(object, coords) { }
+        });
+      });
+    </script>
   </head>
 
   <body>
@@ -54,17 +80,14 @@
         <div id="question">
           <h1>Question</h1>
           <p>Task: <span id="task-id" class="label label-warning">#</span></p>
-          <ul class="thumbnails">
-                  <li><a id="photo-link" href="#" class="thumbnail"><img id="photo" src="#"></a></li>
-          </ul>
+          <div id="viewer" class="viewer"></div>
         </div>
         <div id="answer">
           <button class="btn btn-success" onclick="submitTask('Yes')">Yes</button>
           <button class="btn btn-info" onclick="submitTask('No')">No</button>
-          <button class="btn" onclick="getApp('flickrperson')">I don't know</button>
+          <button class="btn" onclick="getApp('tabletranscriber')">I don't know</button>
         </div>
       </div>
     </div>
-<script src="js/flickrperson.js"></script>
  </body>
 </html>

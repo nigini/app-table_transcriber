@@ -1,0 +1,16 @@
+@import url(openspending.css);
+
+#container {
+  overflow: hidden;
+}
+  #container > div {
+    width: 49%;
+    float: left;
+  }
+  #container > div.first-child {
+    margin-right: 10px;
+  }
+
+#right-panel {
+  display: none;
+}

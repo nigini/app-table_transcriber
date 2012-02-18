@@ -100,7 +100,7 @@ function submitTask(answer) {
                                         setTimeout(function() {
                                             $("#success").fadeOut();
                                             }, 1000);
-                                        getApp("flickrperson");
+                                        getApp("tabletranscriber");
                                      }
                         });
 
@@ -111,4 +111,4 @@ function submitTask(answer) {
     });
 }
 
-getApp("flickrperson");
+getApp("tabletranscriber");
